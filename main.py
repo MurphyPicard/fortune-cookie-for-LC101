@@ -15,11 +15,39 @@
 # limitations under the License.
 #
 import webapp2
+import random
+
+#chooses a random fortune
+def getRandomFortune():
+    fortunes = ["You're going to live!", "Sorry, you're going to die.", "Try again"]
+    index = random.randint(0,2)
+    return fortunes[index]
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write("Hello Ara's world!")
+        header = "<h1>Forture Cookie Page</h1>"
 
-app = webapp2.WSGIApplication([
-    ('/', MainHandler)
-], debug=True)
+        fortune = getRandomFortune()
+        fortune_paragraph = "<p> Your fortune is: " + fortune + "</p>"
+
+        lucky_number = random.randint(1,100)
+        number_sentence = "Your lucky number is: " + str(lucky_number)
+        number_paragraph = "<p>" + number_sentence + "</p>"
+
+        try_again = "<a href='.'>Another cookie please</a>"
+
+        content = header + fortune_paragraph + number_paragraph + try_again
+        self.response.write(content)
+
+class LoginHandler(webapp2.RequestHandler):
+    def get(self):
+        header = "<h1>Please Log In...you can't... but thanks for trying</h1>"
+        lucky_number = random.randint(1,100)
+        number_sentence = "You're lucky number is: " + str(lucky_number)
+        number_paragraph = "<p>" + number_sentence + "</p>"
+        self.response.write(header + number_paragraph)
+
+
+routes = [('/', MainHandler),
+          ('/login', LoginHandler)]
+app = webapp2.WSGIApplication(routes, debug=True)
